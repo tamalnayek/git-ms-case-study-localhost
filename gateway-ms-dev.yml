@@ -1,0 +1,98 @@
+#gateway-ms:
+#  server:
+#    port: 8088
+
+spring:
+  sleuth:
+    trace-id128: true
+    sampler:
+      probability: 1.0
+  zipkin:
+    enabled: true
+    #base-url: http://zipkin:9411/
+    base-url: http://192.168.99.101:9411/
+  cloud:
+    bus:
+      destination: OnlineGrocery
+    
+  rabbitmq:
+    #host: rabbitmq-master
+    host: 192.168.99.101
+    port: 5672
+
+
+security:
+  oauth2:
+    resource:
+      #token-info-uri: http://192.168.56.102:30023/auth/oauth/check_token
+      token-info-uri: http://localhost:8766/auth/oauth/check_token
+    client:
+      client-id: web
+      client-secret: webpass
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+#Config zone for eureka
+gateway-ms:
+   eureka:
+     instance:
+       zone: TAM
+
+zuul:
+  sensitive-headers:
+  - Cookie
+  - Set-Cookie
+  ignored-services: "*"
+  host:
+    connect-timeout-millis: 10000
+    socket-timeout-millis: 20000
+    
+  routes:
+    auth-server:
+      path: /auth/** #path that will be intercepted
+#      url: http://localhost:8766/auth/oauth
+      service-id: auth-server #which serviceId the request will be mapped to
+      strip-prefix: false     #if zuul should replace the "/auth/" segment 
+      
+    cart:
+      path: /cart/**
+#      url: http://localhost:59732/cart
+      service-id: cart-ms
+      strip-prefix: false
+      
+    order:
+      path: /order/**
+#      url: http://localhost:59767/order
+      service-id: order-ms
+      strip-prefix: false
+      
+    product:
+      path: /product/**      
+#      url: http://localhost:59685/product
+      service-id: product-ms
+      strip-prefix: false  
+ 
+#hystrix:
+#  command:
+#    cart-ms:
+#      execution:
+#        isolation:
+#          thread:
+#            timeoutInMilliseconds: 5000
+
+#  host:
+#    connect-timeout-millis: 10000
+#    socket-timeout-millis: 1000000
+
+#logging.level:
+#  org.springframework.cloud.gateway: DEBUG
+#  org.springframework.security: DEBUG
+
+#  org.springframework.web.reactive.function.client: TRACE
+
+#gateway-ms.server.port:8088
+
+
