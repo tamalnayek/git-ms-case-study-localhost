@@ -42,6 +42,13 @@ gateway-ms:
        zone: TAM
 
 zuul:
+  ribbon:
+    eager-load:
+      enabled: true
+    
+    ConnectTimeout: 10000
+    ReadTimeout: 10000
+    
   sensitive-headers:
   - Cookie
   - Set-Cookie
