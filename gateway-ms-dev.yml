@@ -80,7 +80,13 @@ zuul:
       path: /product/**      
 #      url: http://localhost:59685/product
       service-id: product-ms
-      strip-prefix: false  
+      strip-prefix: false 
+      
+    audit:
+      path: /audit/**      
+#      url: http://localhost:59685/product
+      service-id: audit-ms
+      strip-prefix: false      
  
 #hystrix:
 #  command:
